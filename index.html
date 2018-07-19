@@ -36,10 +36,15 @@
             <p>Each time when the game starts, the game will change the
                 values of each crystal.
             </p>
+            <br>
+            <button class="game-button" id="button-start">
+                <h2>Start game.</h2>
+            </button>
         </section>
 
         <section id="target-number">
             <h3>Target number: </h3>
+            <div class="text-left" id="target-score"></div>
         </section>
 
         <section id="wins-and-losses">
@@ -83,24 +88,123 @@
         $(document).ready(function() {              //begin document.ready
         
             //make global variables
-            var $targetScore = 0;
-            var $currentScore = 0;       
+            var $targetScore = 0;       //between 19-120
+            var $currentScore = 0;
+            var $rupeeValues = [0, 0, 0, 0];    //4 values, each ranging from 1-12
+            var $randomValue = 0;
             var $wins= 0;
             var $losses = 0;
+            var $gameComplete = true;
+            var $duplicateValues = true;        //true if 2 or more values in $rupeeValues are equal
 
             //make functions
 
-
+            //click function
             $(".rupee").on("click", function() {    //begin click function
+
+                //ignores click if game has completed
+                if ($gameComplete) {
+                    return false;
+                }
+
+                //adds clicked button's value to current score
                 $currentScore += parseInt($(this).val());
+                
                 //prevents current score from going negative
-                if($currentScore < 0) {
+                if ($currentScore < 0) {
                     $currentScore = 0;
                 }
+
+                //detect if game is lost or won
+                if($currentScore > $targetScore) {
+                    //lose game
+                    $losses++;
+                    $gameComplete = true;
+                } else if ($currentScore == $targetScore) {
+                    //win game
+                    $wins++;
+                    $gameComplete = true;
+                }
+
                 $("#wins-text").text($wins);
                 $("#losses-text").text($losses);
                 $("#current-score").text($currentScore);
             });                                     //end click function
+
+            //generate non-duplicate random number
+            function makeUniqueNumber () {
+                //changes to false when a non-duplicate is found
+                var isDuplicate = true;
+                //make random numbers until non-duplicate generates
+                while (isDuplicate) {
+                    //make a random number between 1 and 12
+                    $randomValue = Math.floor(Math.random() * 12 + 1);
+                    //check to see if array already contains same value as current generated random value
+                    for(var i=0; i<$rupeeValues.length; i++) {
+                        if ($randomValue == $rupeeValues[i]) {
+                            isDuplicate = true;
+                        } else {
+                            isDuplicate = false;
+                        }   
+                    }
+                }
+                console.log("Found unique number of " + $randomValue);
+                return $randomValue;                    
+            };
+
+            //change rupee's value
+            function setRupeesAndTarget (x) {
+
+                //generates and plugs unique random numbers into rupee values array
+                for(var i = 0; i<4; i++) {
+                    $rupeeValues[i] = makeUniqueNumber();
+                    console.log("rupee value at index " + i + " equals " + $rupeeValues[i]);
+                }
+
+                //manually assign random numbers to each of the 4 buttons
+                //(I'm certain there's a good way to avoid repeating this...)
+                //(Perhaps redesign the buttons such that they can be traversed with an iterator)
+                $("#button-green").val(parseInt($rupeeValues[0]));
+                console.log("green is " + $("#button-green").val());
+                $("#button-blue").val(parseInt($rupeeValues[1]));
+                console.log("blue is " + $("#button-blue").val());
+                $("#button-red").val(parseInt($rupeeValues[2]));
+                console.log("red is " + $("#button-red").val());
+                $("#button-purple").val(parseInt($rupeeValues[3]));
+                console.log("purple is " + $("#button-purple").val());
+
+                //make random number between 19 and 120
+                var $randomScore = Math.floor(Math.random() * 102 + 19);
+
+                //ensure number makes the game winnable
+                
+                //assign random to $targetScore
+                $targetScore = $randomScore;
+
+            };
+
+            //start game function
+            $("#button-start").on("click", function () {    //begin start game function
+                
+                //reset variables
+                $currentScore = 0;
+                $gameComplete = false;
+
+                setRupeesAndTarget();
+
+                //display numbers
+                $("#target-score").text($targetScore);
+                $("#wins-text").text($wins);
+                $("#losses-text").text($losses);
+                $("#current-score").text($currentScore);
+            });                                             //end start game function
+
+
+
+
+
+
+
 
         });                                         //end document.ready
 
