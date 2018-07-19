@@ -39,21 +39,33 @@
         </section>
 
         <section id="target-number">
-
+            <h3>Target number: </h3>
         </section>
 
         <section id="wins-and-losses">
-
+            <h3>Wins: </h3>
+            <div class="text-left" id="wins-text"></div>
+            <br>
+            <h3>Losses: </h3>
+            <div class="text-left" id="losses-text"></div>
         </section>
 
         <section id="rupees">
-            <button class="rupee" id="button-green">
-                <img class="rupee" id="green" src="assets/images/green.jpg" alt="green rupee">
+            <button class="rupee" id="button-green" value=1>
+                <img id="green" src="assets/images/green.jpg" alt="green rupee">
             </button>
-            <button class="rupee" id="button-blue"><img class="rupee" id="blue" src="assets/images/blue.jpg" alt="blue rupee"></button>
-            <button class="rupee" id="button-red"><img class="rupee" id="red" src="assets/images/red.jpg" alt="red rupee"></button>
-            <button class="rupee" id="button-purple"><img class="rupee" id="purple" src="assets/images/purple.jpg" alt="purple rupee"></button>
-            <button class="rupee" id="button-black"><img class="rupee" id="black" src="assets/images/black.jpg" alt="rupoor"></button>
+            <button class="rupee" id="button-blue" value=5>
+                <img id="blue" src="assets/images/blue.jpg" alt="blue rupee">
+            </button>
+            <button class="rupee" id="button-red" value=20>
+                <img id="red" src="assets/images/red.jpg" alt="red rupee">
+            </button>
+            <button class="rupee" id="button-purple" value=50>
+                <img id="purple" src="assets/images/purple.jpg" alt="purple rupee">
+            </button>
+            <button class="rupee" id="button-black" value=-10>
+                <img id="black" src="assets/images/black.jpg" alt="rupoor">
+            </button>
         </section>
 
         <section id="current-score-heading">
@@ -68,17 +80,29 @@
 
     <script type="text/javascript">
 
-        $(document).ready(function() {      //begin document.ready
+        $(document).ready(function() {              //begin document.ready
         
             //make global variables
-            var $targetScore;
-            var $currentScore;       
-            var $wins;
-            var $losses;
+            var $targetScore = 0;
+            var $currentScore = 0;       
+            var $wins= 0;
+            var $losses = 0;
 
             //make functions
 
-        });                                 //end document.ready
+
+            $(".rupee").on("click", function() {    //begin click function
+                $currentScore += parseInt($(this).val());
+                //prevents current score from going negative
+                if($currentScore < 0) {
+                    $currentScore = 0;
+                }
+                $("#wins-text").text($wins);
+                $("#losses-text").text($losses);
+                $("#current-score").text($currentScore);
+            });                                     //end click function
+
+        });                                         //end document.ready
 
     </script>
     
