@@ -3,11 +3,36 @@
     width: 150px;
 }
 
-#current-score-heading {
-    background-color: aquamarine;
+body {
+    background-image: url(../images/hyrule-field.gif), url(../images/parchment.jpg);
+    background-position: center bottom, center center;
+    background-repeat: no-repeat, repeat;
+    vertical-align: center;
+    /* position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    width: 1400px; */
+
 }
 
-#current-score-section {
-    background-color: aquamarine;
+@font-face {
+    font-family: "Font Name";
+    src: url(../fonts/customFont.ttf) format("truetype");
 }
 
+#current-score-heading, #target-number,
+#wins-and-losses, #current-score-section,
+#instructions {
+    font-family: "Font Name";
+    background: rgba(255, 255, 255, 0.7);
+}
+
+#instructions {
+    height: 205px;
+}

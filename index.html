@@ -22,6 +22,8 @@
 
     <div class="container">
 
+        <!-- <section id="title"><h1>Crystal Collector!</h1></section> -->
+
         <section id="instructions">
             <p>You will be given a random number at the start of the game.</p>
             <p>There are four crystals below. By clicking on a crystal, 
@@ -37,12 +39,13 @@
                 values of each crystal.
             </p>
             <br>
-            <button class="game-button" id="button-start">
-                <h2>Start game.</h2>
-            </button>
         </section>
 
         <section id="target-number">
+                <button class="game-button" id="button-start">
+                        <h2>Start game.</h2>
+                    </button>
+                    
             <h3>Target number: </h3>
             <div class="text-left" id="target-score"></div>
         </section>
@@ -68,9 +71,9 @@
             <button class="rupee" id="button-purple" value=50>
                 <img id="purple" src="assets/images/purple.jpg" alt="purple rupee">
             </button>
-            <button class="rupee" id="button-black" value=-10>
+            <!-- <button class="rupee" id="button-black" value=-10>
                 <img id="black" src="assets/images/black.jpg" alt="rupoor">
-            </button>
+            </button> -->
         </section>
 
         <section id="current-score-heading">
@@ -97,10 +100,16 @@
             var $gameComplete = true;
             var $duplicateValues = true;        //true if 2 or more values in $rupeeValues are equal
 
+            //display values
+            $("#target-score").text($targetScore);
+            $("#wins-text").text($wins);
+            $("#losses-text").text($losses);
+            $("#current-score").text($currentScore);
+
             //make functions
 
             //click function
-            $(".rupee").on("click", function() {    //begin click function
+            $(".rupee").on("click", function() {
 
                 //ignores click if game has completed
                 if ($gameComplete) {
@@ -129,7 +138,7 @@
                 $("#wins-text").text($wins);
                 $("#losses-text").text($losses);
                 $("#current-score").text($currentScore);
-            });                                     //end click function
+            });
 
             //generate non-duplicate random number
             function makeUniqueNumber () {
@@ -139,26 +148,57 @@
                 while (isDuplicate) {
                     //make a random number between 1 and 12
                     $randomValue = Math.floor(Math.random() * 12 + 1);
-                    //check to see if array already contains same value as current generated random value
-                    for(var i=0; i<$rupeeValues.length; i++) {
-                        if ($randomValue == $rupeeValues[i]) {
-                            isDuplicate = true;
-                        } else {
-                            isDuplicate = false;
-                        }   
-                    }
+                    console.log("random rupee value is: " + $randomValue);
+                    isDuplicate = checkUniqueNumber($randomValue);
                 }
-                console.log("Found unique number of " + $randomValue);
+                //console.log("Found unique number of " + $randomValue);
                 return $randomValue;                    
             };
 
-            //change rupee's value
+            function checkUniqueNumber (number) {
+                //check to see if array already contains same value as current generated random value
+                for(var i=0; i<$rupeeValues.length; i++) {
+                    //console.log("checking array");
+                    //console.log("array spot " + i + " has value " + $rupeeValues[i]);
+                    if (number === $rupeeValues[i]) {
+                        return true;
+                    }  
+                }
+                return false;
+
+            }
+
+            //generate random target score that makes game winnable
+            function makeWinnableScore () {
+
+                //change to true when a winnable number is found
+                //var isWinnable = false;
+                //make random numbers until winnable number generates
+                //while (!isWinnable) {
+                    //make random number between 19 and 120
+                    var $randomScore = Math.floor(Math.random() * 102 + 19);
+                
+                //}
+                //assign random to $targetScore
+                $targetScore = $randomScore;
+            };
+
+            //CURRENTLY NOT FINISHED, DO NOT CALL
+            function checkWinnable () {
+                //check various sums of combinations of the four rupee values 
+                
+                for(a=1; a<11; a++) {
+
+                }
+            };
+
+            //change rupees' values
             function setRupeesAndTarget (x) {
 
                 //generates and plugs unique random numbers into rupee values array
                 for(var i = 0; i<4; i++) {
                     $rupeeValues[i] = makeUniqueNumber();
-                    console.log("rupee value at index " + i + " equals " + $rupeeValues[i]);
+                    //console.log("rupee value at index " + i + " equals " + $rupeeValues[i]);
                 }
 
                 //manually assign random numbers to each of the 4 buttons
@@ -172,14 +212,13 @@
                 console.log("red is " + $("#button-red").val());
                 $("#button-purple").val(parseInt($rupeeValues[3]));
                 console.log("purple is " + $("#button-purple").val());
-
+               
+                //assign random to $targetScore
+                //$targetScore = makeWinnableScore();
                 //make random number between 19 and 120
                 var $randomScore = Math.floor(Math.random() * 102 + 19);
-
-                //ensure number makes the game winnable
-                
-                //assign random to $targetScore
                 $targetScore = $randomScore;
+                console.log("Target is: " + $targetScore);
 
             };
 
@@ -190,6 +229,7 @@
                 $currentScore = 0;
                 $gameComplete = false;
 
+                //set random values for rupees and target score
                 setRupeesAndTarget();
 
                 //display numbers
